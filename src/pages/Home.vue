@@ -1,11 +1,11 @@
 <template>
     <section>
         <div class="container mx-auto px-3 py-4 md:px-0">
-            <div class="grid md:grid-cols-5 grid-cols-2 gap-4">
-                <div v-for="pokemon in pokemons" :key="pokemon.name">
-                    <PokeCard :pokemon="pokemon" @mouseover="playSound" />
-                </div>
-            </div>
+            <TransitionGroup tag="div" name="list" class="grid md:grid-cols-5 grid-cols-2 gap-4">
+                    <div v-for="pokemon in pokemons" :key="pokemon.name">
+                        <PokeCard :pokemon="pokemon" @mouseover="playSound" />
+                    </div>
+            </TransitionGroup>
         </div>
     </section>
     <audio class="play">
@@ -41,6 +41,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
 </style>
