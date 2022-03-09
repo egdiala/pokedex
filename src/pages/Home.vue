@@ -1,20 +1,42 @@
 <template>
     <section>
-        <div class="container mx-auto">
-            <div class="grid grid-cols-6 gap-4">
-                <div v-for="n in 1000">{{n + 1}}</div>
+        <div class="container mx-auto px-3 py-4 md:px-0">
+            <div class="grid md:grid-cols-5 grid-cols-2 gap-4">
+                <div v-for="pokemon in pokemons" :key="pokemon.name">
+                    <PokeCard :pokemon="pokemon" @mouseover="playSound" />
+                </div>
             </div>
         </div>
     </section>
+    <audio class="play">
+        <source src="./../assets/audio/poke_select.mp3" type="audio/mpeg">
+    </audio>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { pokeUrl } from '../api'
 
 export default defineComponent({
-    name: 'Home',
-    setup () {
-        return {}
+    name: "Home",
+    setup() {
+        const pokemons = ref([]);
+        const playSound = function () {
+            document.querySelector('.play').play();
+            return;
+        }
+        onMounted(() => {
+            pokeUrl.get("pokemon?limit=100&offset=0").then(res => {
+                let results = res.data.results;
+                pokemons.value.push(...results);
+            }).catch(err => {
+                console.log(err);
+            })
+        });
+        return {
+            pokemons,
+            playSound
+        };
     }
 })
 </script>

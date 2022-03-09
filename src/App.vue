@@ -5,8 +5,10 @@
 </script>
 
 <template>
-  <Navbar class="sticky w-full top-0 z-10 bg-red-500"></Navbar>
-  <router-view></router-view>
+  <main class="flex-1">
+    <Navbar></Navbar>
+    <router-view></router-view>
+  </main>
 </template>
 
 <style>

@@ -4,6 +4,7 @@
 
 body {
     @apply h-screen bg-[#0A0A0A] !important;
+    font-family: 'Alegreya Sans', sans-serif;
 }
 
 #app {
