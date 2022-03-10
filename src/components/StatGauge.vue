@@ -14,7 +14,7 @@ export default defineComponent({
           el.style.width = 0
       },
       enter (el) {
-          el.style.width = `${this.baseStat}%`
+          el.style.width = `${this.baseStat}px`
           el.style.transition = `width 1.4s linear`
       }
   }
@@ -22,7 +22,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="w-36 bg-yellow-100 h-5" role="progressbar" :aria-valuenow="baseStat" aria-valuemin="0" aria-valuemax="100">
+  <div class="w-36 bg-yellow-100 h-5" role="progressbar" :aria-valuenow="baseStat" aria-valuemin="0" aria-valuemax="140">
       <transition appear @before-appear="beforeEnter" @after-appear="enter">
           <div class="bg-yellow-400 h-5 gauge flex items-center px-2 text-yellow-900"><span>{{baseStat}}</span></div>
       </transition>

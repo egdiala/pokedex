@@ -1,9 +1,12 @@
 <template>
     <section>
         <div class="container mx-auto px-3 py-4 md:px-0">
-            <div class="grid md:grid-cols-5 grid-cols-2 gap-4">
-                <div v-for="pokemon in pokemons" :key="pokemon.name" class="animate__animated animate__fadeInUp">
-                    <PokeCard :pokemon="pokemon" @mouseover="playSound" />
+            <Loader v-if="pokemons.length < 1"/>
+            <div v-else>
+                <div ref='scrollComponent' class="grid md:grid-cols-5 grid-cols-2 gap-6">
+                    <div v-for="pokemon in pokemons" :key="pokemon.name" class="animate__animated animate__fadeInUp">
+                        <PokeCard :pokemon="pokemon" @mouseover="playSound" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -14,28 +17,48 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 import { pokeUrl } from '../api'
 
 export default defineComponent({
     name: "Home",
     setup() {
         const pokemons = ref([]);
-        const playSound = function () {
-            document.querySelector('.play').play();
+        const offset = ref(0);
+        const scrollComponent = ref(null)
+        const playSound = () => {
+            document.querySelector(".play").play();
             return;
+        };
+        const infiniteHandler = (e) => {
+            let element = scrollComponent.value;
+            if (pokemons.value.length > 0) {
+                if (element.getBoundingClientRect().bottom < window.innerHeight) {
+                    offset.value = offset.value + 100;
+                    getPokemonList();
+                }                
+            }
+
         }
-        onMounted(() => {
-            pokeUrl.get("pokemon?limit=100&offset=0").then(res => {
+        const getPokemonList = () => {
+            pokeUrl.get(`pokemon?limit=100&offset=${offset.value}`).then(res => {
                 let results = res.data.results;
                 pokemons.value.push(...results);
             }).catch(err => {
                 console.log(err);
-            })
+            });            
+        }
+        onMounted(() => {
+            getPokemonList();
+            window.addEventListener("scroll", infiniteHandler)
         });
+        onUnmounted(() => {
+  		    window.removeEventListener("scroll", infiniteHandler)
+  	    });
         return {
             pokemons,
-            playSound
+            playSound,
+            scrollComponent
         };
     }
 })

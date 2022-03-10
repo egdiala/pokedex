@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="container mx-auto px-3 py-4 md:px-0">
-            <div v-if="!pokemonData.name" class="flex items-center h-screen"><img alt="pokeball" src="./../assets/img/pokeball.png" class="w-10 animate-spin mx-auto" /></div>
+            <Loader v-if="!pokemonData.name"/>
             <div v-else class="flex flex-col space-y-8">
                 <div class="flex md:flex-row flex-col md:space-x-8 space-y-8 md:items-start">
                     <div class="mx-auto md:mx-0">
@@ -36,7 +36,7 @@
                     <div class="flex space-x-2 items-center">
                         <span>Types: </span>
                         <div class="flex space-x-2">
-                            <div v-for="(type,t) in pokemonData.types" :key="t" class="bg-yellow-200 rounded-md px-1 text-gray-600">{{ type.type.name}}</div>
+                            <Badge v-for="(type,t) in pokemonData.types" :key="t">{{ type.type.name}}</Badge>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { pokeUrl } from '../api'
 import StatGauge from '../components/StatGauge.vue'
