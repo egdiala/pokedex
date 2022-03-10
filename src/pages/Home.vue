@@ -9,8 +9,8 @@
                     <Select label="Habitat Filter" v-model="habitat" :options="habitats" @change="filterByHabitat" class="w-full" />
                 </div>
                 <div v-if="gender || habitat" class="px-4 lg:px-0 flex items-center mt-5">
-                    <Chip :label="gender" @click="gender = '', clear()"/>
-                    <Chip :label="habitat" @click="habitat = '', clear()"/>
+                    <Chip v-if="gender" :label="gender" @click="gender = '', clear()"/>
+                    <Chip v-if="habitat" :label="habitat" @click="habitat = '', clear()"/>
                 </div>
                 <div v-if="filteredPokemon.length > 0" ref='scrollComponent' class="grid md:grid-cols-5 grid-cols-2 gap-6 mt-10">
                     <div v-for="pokemon in filteredPokemon" :key="pokemon.name" class="animate__animated animate__fadeInUp">
