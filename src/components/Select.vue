@@ -2,7 +2,7 @@
     <div class="p-0 border-0 shadow-none text-left grow">
         <label v-if="label" class="mb-1">{{ label }}</label>
         <select v-bind="{...$attrs, onChange: ($event) => { $emit('update:modelValue', $event.target.value) } }" :value="modelValue" class="select">
-            <option v-for="option in options" :key="option" :value="option" :selected="option === modelValue">{{ option }}</option>
+            <option v-for="option in options" :key="option" :value="option" :selected="option === modelValue" class="capitalize">{{ option }}</option>
         </select>
     </div>
 </template>

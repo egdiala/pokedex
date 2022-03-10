@@ -3,11 +3,10 @@
         <div class="container mx-auto px-3 py-4 md:px-0">
             <Loader v-if="pokemons.length < 1"/>
             <div v-else>
-                <div class="flex grow mb-10 space-x-4 items-center">
-                    <Input placeholder="Find a pokemon..." label="Search" v-model.lazy="search" @keyup="filterByName" />
-                    <Select label="Gender Filter" v-model="gender" :options="['male', 'female']" @change="filterByGender" />
-                    <Select label="Region Filter" v-model="gender" :options="['male', 'female']" @change="filterByRegion" />
-                    <Select label="Habitat Filter" v-model="gender" :options="['male', 'female']" @change="filterByHabitat" />
+                <div class="flex grow md:flex-row flex-col space-y-4 space-x-0 mb-10 md:space-x-4 md:space-y-0 items-center">
+                    <Input placeholder="Find a pokemon..." label="Search by Name" v-model.lazy="search" @keyup="filterByName" class="w-full" />
+                    <Select label="Gender Filter" v-model="gender" :options="genders" @change="filterByGender" class="w-full" />
+                    <Select label="Habitat Filter" v-model="habitat" :options="habitats" @change="filterByHabitat" class="w-full" />
                 </div>
                 <div v-if="filteredPokemon.length > 0" ref='scrollComponent' class="grid md:grid-cols-5 grid-cols-2 gap-6">
                     <div v-for="pokemon in filteredPokemon" :key="pokemon.name" class="animate__animated animate__fadeInUp">
@@ -24,16 +23,20 @@
 
 <script>
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import { useStore } from 'vuex'
 import { pokeUrl } from '../api'
 
 export default defineComponent({
     name: "Home",
     setup() {
+        const store = useStore()
         const pokemons = ref([]);
         const filteredPokemon = ref(pokemons.value);
         const total = ref(0);
         const offset = ref(0);
         const search = ref('')
+        const gender = ref('')
+        const habitat = ref('')
         const scrollComponent = ref(null)
         const playSound = () => {
             document.querySelector(".play").play();
@@ -61,6 +64,8 @@ export default defineComponent({
             });            
         }
         onMounted(() => {
+            store.dispatch('getGenders')
+            store.dispatch('getHabitats')
             getPokemonList();
             window.addEventListener("scroll", infiniteHandler)
         });
@@ -78,9 +83,25 @@ export default defineComponent({
                 filteredPokemon.value = pokemons.value;
             }
         };
+        const filterByGender = function() {
+            store.dispatch('getGender', {gender: gender.value}).then(() => {
+                filteredPokemon.value = store.state.pokemons
+            })
+        };
+        const filterByHabitat = function() {
+            store.dispatch('getHabitat', {habitat: habitat.value}).then(() => {
+                filteredPokemon.value = store.state.pokemons
+            })
+        };
         return {
             search,
+            gender,
+            habitat,
+            genders: store.state.genders,
+            habitats: store.state.habitats,
             filterByName,
+            filterByGender,
+            filterByHabitat,
             filteredPokemon,
             pokemons,
             playSound,
