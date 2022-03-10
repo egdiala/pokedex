@@ -3,12 +3,16 @@
         <div class="container mx-auto px-3 py-4 md:px-0">
             <Loader v-if="pokemons.length < 1"/>
             <div v-else>
-                <div class="flex grow md:flex-row flex-col space-y-4 space-x-0 mb-10 md:space-x-4 md:space-y-0 items-center">
+                <div class="flex grow md:flex-row flex-col space-y-4 space-x-0 md:space-x-4 md:space-y-0 items-center">
                     <Input placeholder="Find a pokemon..." label="Search by Name" v-model.lazy="search" @keyup="filterByName" class="w-full" />
                     <Select label="Gender Filter" v-model="gender" :options="genders" @change="filterByGender" class="w-full" />
                     <Select label="Habitat Filter" v-model="habitat" :options="habitats" @change="filterByHabitat" class="w-full" />
                 </div>
-                <div v-if="filteredPokemon.length > 0" ref='scrollComponent' class="grid md:grid-cols-5 grid-cols-2 gap-6">
+                <div v-if="gender || habitat" class="px-4 lg:px-0 flex items-center mt-5">
+                    <Chip :label="gender" @click="gender = '', clear()"/>
+                    <Chip :label="habitat" @click="habitat = '', clear()"/>
+                </div>
+                <div v-if="filteredPokemon.length > 0" ref='scrollComponent' class="grid md:grid-cols-5 grid-cols-2 gap-6 mt-10">
                     <div v-for="pokemon in filteredPokemon" :key="pokemon.name" class="animate__animated animate__fadeInUp">
                         <PokeCard :pokemon="pokemon" @mouseover="playSound" />
                     </div>
@@ -93,7 +97,11 @@ export default defineComponent({
                 filteredPokemon.value = store.state.pokemons
             })
         };
+        const clear = () => {
+            filteredPokemon.value = pokemons.value
+        }
         return {
+            clear,
             search,
             gender,
             habitat,
