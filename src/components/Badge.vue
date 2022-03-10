@@ -1,19 +1,15 @@
 <template>
-    <div class="rounded-md px-1 text-gray-600" :style="style">
+    <div class="rounded-md px-1 text-yellow-600 bg-yellow-100 text-sm">
         <slot></slot>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
     setup () {
-        const randomColor = Math.floor(Math.random()*16777215).toString(16);
         return {
-            style: computed(() => ({
-                backgroundColor: `#${randomColor} !important`,
-            })),
         }
     }
 })
