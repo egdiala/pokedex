@@ -59,7 +59,6 @@ export default defineComponent({
         onMounted(() => {
             pokeUrl.get(`pokemon/${route.params.id}`).then(res => {
                 let result = res.data;
-                console.log(result);
                 pokemonData.value = result;
             }).catch(err => {
                 console.log(err);

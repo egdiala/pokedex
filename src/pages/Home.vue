@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { pokeUrl } from '../api'
 
@@ -83,7 +83,6 @@ export default defineComponent({
                 filteredPokemon.value = result;
             }
             else {
-                console.log('not here')
                 filteredPokemon.value = pokemons.value;
             }
         };
@@ -105,8 +104,8 @@ export default defineComponent({
             search,
             gender,
             habitat,
-            genders: store.state.genders,
-            habitats: store.state.habitats,
+            genders: computed(() => store.state.genders),
+            habitats: computed(() => store.state.habitats),
             filterByName,
             filterByGender,
             filterByHabitat,
