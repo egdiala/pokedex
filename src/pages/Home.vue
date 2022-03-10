@@ -3,8 +3,11 @@
         <div class="container mx-auto px-3 py-4 md:px-0">
             <Loader v-if="pokemons.length < 1"/>
             <div v-else>
-                <div class="flex grow mb-6">
-                    <Input placeholder="Find a pokemon..." label="Search" v-model="search" @keydown="filterEntry" />
+                <div class="flex grow mb-10 space-x-4 items-center">
+                    <Input placeholder="Find a pokemon..." label="Search" v-model.lazy="search" @keyup="filterByName" />
+                    <Select label="Gender Filter" v-model="gender" :options="['male', 'female']" @change="filterByGender" />
+                    <Select label="Region Filter" v-model="gender" :options="['male', 'female']" @change="filterByRegion" />
+                    <Select label="Habitat Filter" v-model="gender" :options="['male', 'female']" @change="filterByHabitat" />
                 </div>
                 <div v-if="filteredPokemon.length > 0" ref='scrollComponent' class="grid md:grid-cols-5 grid-cols-2 gap-6">
                     <div v-for="pokemon in filteredPokemon" :key="pokemon.name" class="animate__animated animate__fadeInUp">
@@ -65,7 +68,7 @@ export default defineComponent({
   		    window.removeEventListener("scroll", infiniteHandler)
   	    });
         // live search filter
-        const filterEntry = function () {
+        const filterByName = function () {
             if (search.value !== "") {
                 const result = filteredPokemon.value.filter((pokemon) => pokemon.name.toLowerCase().match(search.value.toLowerCase()));
                 filteredPokemon.value = result;
@@ -77,7 +80,7 @@ export default defineComponent({
         };
         return {
             search,
-            filterEntry,
+            filterByName,
             filteredPokemon,
             pokemons,
             playSound,
